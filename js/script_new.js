@@ -131,13 +131,19 @@ const FormManager = {
 
   // Get form data for current report
   getFormData: (reportType) => {
+    console.log('Getting form data for:', reportType);
     const section = document.getElementById(reportType);
-    if (!section) return {};
+    if (!section) {
+      console.log('Section not found:', reportType);
+      return {};
+    }
 
     const formData = {};
     const inputs = section.querySelectorAll('input, textarea, select');
+    console.log('Found inputs:', inputs.length);
     
     inputs.forEach(input => {
+      console.log('Processing input:', input.id, input.type, input.value);
       if (input.type === 'checkbox') {
         formData[input.id] = input.checked;
       } else if (input.type === 'radio') {
@@ -153,6 +159,7 @@ const FormManager = {
     formData.officers = FormManager.getDynamicFields('arrestingOfficers', 'officer-input');
     formData.suspects = FormManager.getDynamicFields('suspects', 'suspect-item');
 
+    console.log('Final form data:', formData);
     return formData;
   },
 
@@ -161,8 +168,20 @@ const FormManager = {
     const container = document.getElementById(containerId);
     if (!container) return [];
 
-    const items = container.querySelectorAll(`.${inputClass}`);
-    return Array.from(items).map(item => item.value).filter(value => value.trim());
+    if (inputClass === 'suspect-item') {
+      // Handle suspect items with multiple fields
+      const suspectItems = container.querySelectorAll('.suspect-item');
+      return Array.from(suspectItems).map(item => {
+        const name = item.querySelector('.suspect-name')?.value || '';
+        const id = item.querySelector('.suspect-id')?.value || '';
+        const charges = item.querySelector('.suspect-charges')?.value || '';
+        return { name, id, charges };
+      }).filter(suspect => suspect.name.trim() || suspect.id.trim());
+    } else {
+      // Handle officer items with single input
+      const items = container.querySelectorAll(`.${inputClass}`);
+      return Array.from(items).map(item => item.value).filter(value => value.trim());
+    }
   },
 
   // Save form data to localStorage
@@ -230,22 +249,38 @@ const FormManager = {
 
   // Validate form
   validateForm: (reportType) => {
+    console.log('Validating form for:', reportType);
     const section = document.getElementById(reportType);
+    console.log('Section found:', !!section);
     if (!section) return false;
 
-    const requiredFields = section.querySelectorAll('[required]');
+    // Only validate essential fields - allow partial form submission
+    const essentialFields = section.querySelectorAll('[data-essential="true"]');
+    console.log('Essential fields found:', essentialFields.length);
     let isValid = true;
+    let emptyFields = [];
 
-    requiredFields.forEach(field => {
-      if (!field.value.trim()) {
-        field.classList.add('error');
-        isValid = false;
-      } else {
-        field.classList.remove('error');
+    // Check essential fields if any exist
+    if (essentialFields.length > 0) {
+      essentialFields.forEach(field => {
+        console.log('Checking field:', field.id, 'value:', field.value);
+        if (!field.value.trim()) {
+          field.classList.add('error');
+          isValid = false;
+          emptyFields.push(field.previousElementSibling?.textContent || 'Required field');
+        } else {
+          field.classList.remove('error');
+        }
+      });
+
+      if (!isValid) {
+        console.log('Essential fields validation failed:', emptyFields);
+        StatusManager.error(`Please fill in essential fields: ${emptyFields.join(', ')}`);
+        return false;
       }
-    });
+    }
 
-    // Special validation for case numbers
+    // Special validation for case numbers (only if filled)
     const caseNumberFields = section.querySelectorAll('[pattern="CID-\\d+-SO"]');
     caseNumberFields.forEach(field => {
       if (field.value && !Utils.validateCaseNumber(field.value)) {
@@ -255,6 +290,7 @@ const FormManager = {
       }
     });
 
+    console.log('Validation result:', isValid);
     return isValid;
   }
 };
@@ -350,17 +386,26 @@ const DynamicFields = {
 const ReportGenerator = {
   // Generate report
   generate: (reportType) => {
+    console.log('Generating report for:', reportType);
+    
     if (!FormManager.validateForm(reportType)) {
+      console.log('Form validation failed');
       StatusManager.error('Please fill in all required fields');
       return;
     }
 
+    console.log('Form validation passed');
     const formData = FormManager.getFormData(reportType);
+    console.log('Form data collected:', formData);
+    
     const report = ReportGenerator.buildReport(reportType, formData);
+    console.log('Report built:', report);
     
     // Display report
     const output = document.getElementById('reportOutput');
+    console.log('Output element:', output);
     output.textContent = report;
+    console.log('Report set to output element');
     
     // Save to history
     AppState.generatedReports.push({
@@ -382,6 +427,8 @@ const ReportGenerator = {
 
   // Build report content
   buildReport: (reportType, formData) => {
+    console.log('Building report for type:', reportType, 'with data:', formData);
+    
     const headers = {
       'arrest': 'ARREST REPORT',
       'citation': 'CITATION REPORT',
@@ -397,11 +444,14 @@ const ReportGenerator = {
     report += '='.repeat(50) + '\n\n';
     report += `Generated: ${Utils.formatDate(new Date())}\n\n`;
 
+    console.log('Report header created:', report);
+
     // Add form fields
     Object.keys(formData).forEach(key => {
       if (key !== 'officers' && key !== 'suspects' && formData[key]) {
-        const label = this.formatLabel(key);
+        const label = ReportGenerator.formatLabel(key);
         report += `${label}:\n${formData[key]}\n\n`;
+        console.log('Added field:', key, 'with value:', formData[key]);
       }
     });
 
@@ -417,11 +467,15 @@ const ReportGenerator = {
     if (formData.suspects && formData.suspects.length > 0) {
       report += 'SUSPECTS:\n';
       formData.suspects.forEach((suspect, index) => {
-        report += `${index + 1}. ${suspect}\n`;
+        report += `${index + 1}. ${suspect.name || 'Unknown'}`;
+        if (suspect.id) report += ` (ID: ${suspect.id})`;
+        if (suspect.charges) report += `\n   Charges: ${suspect.charges}`;
+        report += '\n';
       });
       report += '\n';
     }
 
+    console.log('Final report content:', report);
     return report;
   },
 
@@ -508,6 +562,17 @@ function clearForm(reportType) {
 
 function generateReport(reportType) {
   ReportGenerator.generate(reportType);
+}
+
+// Test function for debugging
+function testReportGeneration() {
+  console.log('Testing report generation...');
+  
+  // Fill in minimal essential fields for arrest report
+  document.getElementById('arrestDateTime').value = '2024-01-15T14:30';
+  document.getElementById('arrestLocation').value = 'Test Location';
+  
+  generateReport('arrest');
 }
 
 function addOfficer() {

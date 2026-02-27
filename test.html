@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Report Generation</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-form { margin: 20px 0; }
+        .test-form input { margin: 5px; padding: 5px; }
+        #reportOutput { 
+            background: #f5f5f5; 
+            border: 1px solid #ccc; 
+            padding: 10px; 
+            margin: 10px 0; 
+            min-height: 100px;
+            white-space: pre-wrap;
+        }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Report Generation Test</h1>
+    
+    <div class="test-form">
+        <h3>Test Arrest Report</h3>
+        <input type="datetime-local" id="arrestDateTime" data-essential="true">
+        <input type="text" id="arrestLocation" placeholder="Location" data-essential="true">
+        <textarea id="incidentSummary" placeholder="Incident Summary"></textarea>
+    </div>
+    
+    <button onclick="testReportGeneration()">Test Generate Report</button>
+    <button onclick="clearOutput()">Clear Output</button>
+    
+    <h3>Generated Report:</h3>
+    <pre id="reportOutput">Your generated report will appear here...</pre>
+    
+    <div id="statusContainer"></div>
+
+    <script>
+        // Simplified test version of the report generator
+        const Utils = {
+            formatDate: (date) => {
+                return new Date(date).toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            }
+        };
+
+        const StatusManager = {
+            show: (message, type = 'info') => {
+                const container = document.getElementById('statusContainer');
+                const messageEl = document.createElement('div');
+                messageEl.style.cssText = `padding: 10px; margin: 5px 0; border-radius: 5px; background: ${type === 'error' ? '#ff6b6b' : '#51cf66'}; color: white;`;
+                messageEl.textContent = message;
+                container.appendChild(messageEl);
+                setTimeout(() => messageEl.remove(), 3000);
+            },
+            success: (message) => StatusManager.show(message, 'success'),
+            error: (message) => StatusManager.show(message, 'error')
+        };
+
+        function validateForm() {
+            const essentialFields = document.querySelectorAll('[data-essential="true"]');
+            let isValid = true;
+            let emptyFields = [];
+
+            essentialFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    emptyFields.push(field.id || 'Required field');
+                }
+            });
+
+            if (!isValid) {
+                StatusManager.error(`Please fill in: ${emptyFields.join(', ')}`);
+                return false;
+            }
+
+            return true;
+        }
+
+        function getFormData() {
+            const formData = {};
+            document.querySelectorAll('input, textarea').forEach(input => {
+                if (input.value.trim()) {
+                    formData[input.id] = input.value;
+                }
+            });
+            return formData;
+        }
+
+        function buildReport(formData) {
+            let report = 'ARREST REPORT\n';
+            report += '='.repeat(50) + '\n\n';
+            report += `Generated: ${Utils.formatDate(new Date())}\n\n`;
+
+            Object.keys(formData).forEach(key => {
+                const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+                report += `${label}:\n${formData[key]}\n\n`;
+            });
+
+            return report;
+        }
+
+        function generateReport() {
+            console.log('Starting report generation...');
+            
+            if (!validateForm()) {
+                console.log('Validation failed');
+                return;
+            }
+
+            console.log('Validation passed');
+            const formData = getFormData();
+            console.log('Form data:', formData);
+            
+            const report = buildReport(formData);
+            console.log('Report built:', report);
+            
+            const output = document.getElementById('reportOutput');
+            output.textContent = report;
+            console.log('Report displayed');
+            
+            StatusManager.success('Report generated successfully!');
+        }
+
+        function testReportGeneration() {
+            // Auto-fill test data
+            document.getElementById('arrestDateTime').value = '2024-01-15T14:30';
+            document.getElementById('arrestLocation').value = 'Test Location - Main Street';
+            document.getElementById('incidentSummary').value = 'Test incident description for debugging purposes.';
+            
+            generateReport();
+        }
+
+        function clearOutput() {
+            document.getElementById('reportOutput').textContent = 'Your generated report will appear here...';
+        }
+    </script>
+</body>
+</html>

@@ -55,11 +55,11 @@
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="arrestDateTime">Date & Time of Arrest</label>
-                                <input type="datetime-local" id="arrestDateTime" required>
+                                <input type="datetime-local" id="arrestDateTime" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="arrestLocation">Location</label>
-                                <input type="text" id="arrestLocation" placeholder="Enter arrest location" required>
+                                <input type="text" id="arrestLocation" placeholder="Enter arrest location" required data-essential="true">
                             </div>
                         </div>
                         <div class="form-field full-width">
@@ -132,11 +132,11 @@
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="citationDateTime">Date & Time</label>
-                                <input type="datetime-local" id="citationDateTime" required>
+                                <input type="datetime-local" id="citationDateTime" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="citationLocation">Location</label>
-                                <input type="text" id="citationLocation" placeholder="Enter citation location" required>
+                                <input type="text" id="citationLocation" placeholder="Enter citation location" required data-essential="true">
                             </div>
                         </div>
                         <div class="form-row">
@@ -157,7 +157,7 @@
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="offenderName">Full Name</label>
-                                <input type="text" id="offenderName" placeholder="Enter full name" required>
+                                <input type="text" id="offenderName" placeholder="Enter full name" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="offenderDOB">Date of Birth</label>
@@ -232,13 +232,13 @@
                         <h3>Case Information</h3>
                         <div class="form-field">
                             <label for="caseNumber">Case Number</label>
-                            <input type="text" id="caseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <input type="text" id="caseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required data-essential="true">
                             <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
                         </div>
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="caseName">Case Name</label>
-                                <input type="text" id="caseName" placeholder="Enter case name" required>
+                                <input type="text" id="caseName" placeholder="Enter case name" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="caseType">Case Type</label>
@@ -305,13 +305,13 @@
                         <h3>Case Information</h3>
                         <div class="form-field">
                             <label for="updateCaseNumber">Case Number</label>
-                            <input type="text" id="updateCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <input type="text" id="updateCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required data-essential="true">
                             <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
                         </div>
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="updateDateTime">Date / Time</label>
-                                <input type="datetime-local" id="updateDateTime" required>
+                                <input type="datetime-local" id="updateDateTime" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="updateActionTaken">Action Taken</label>
@@ -383,13 +383,13 @@
                         <h3>Case Information</h3>
                         <div class="form-field">
                             <label for="interviewCaseNumber">Case Number</label>
-                            <input type="text" id="interviewCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <input type="text" id="interviewCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required data-essential="true">
                             <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
                         </div>
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="interviewDateTime">Date / Time</label>
-                                <input type="datetime-local" id="interviewDateTime" required>
+                                <input type="datetime-local" id="interviewDateTime" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="interviewType">Interview Type</label>
@@ -412,7 +412,7 @@
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="intervieweeName">Name</label>
-                                <input type="text" id="intervieweeName" placeholder="Full name of interviewee" required>
+                                <input type="text" id="intervieweeName" placeholder="Full name of interviewee" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="interviewLocation">Location</label>
@@ -480,7 +480,7 @@
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="ciCaseNumber">Case Number</label>
-                                <input type="text" id="ciCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                                <input type="text" id="ciCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required data-essential="true">
                                 <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
                             </div>
                             <div class="form-field">
@@ -496,7 +496,7 @@
                         <div class="form-row">
                             <div class="form-field">
                                 <label for="ciIdentifier">CI Identifier</label>
-                                <input type="text" id="ciIdentifier" placeholder="Confidential identifier code" required>
+                                <input type="text" id="ciIdentifier" placeholder="Confidential identifier code" required data-essential="true">
                             </div>
                             <div class="form-field">
                                 <label for="ciClassification">CI Classification</label>
@@ -589,7 +589,7 @@
                         <h3>Case Information</h3>
                         <div class="form-field">
                             <label for="warrantCaseNumber">Case Number</label>
-                            <input type="text" id="warrantCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <input type="text" id="warrantCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required data-essential="true">
                             <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
                         </div>
                         <div class="form-row">
@@ -677,7 +677,7 @@
                         <h3>Case Information</h3>
                         <div class="form-field">
                             <label for="closureCaseNumber">Case Number</label>
-                            <input type="text" id="closureCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <input type="text" id="closureCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required data-essential="true">
                             <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
                         </div>
                         <div class="form-row">
@@ -784,6 +784,11 @@
 
     <!-- Status Messages -->
     <div id="statusContainer" class="status-container"></div>
+
+    <!-- Debug Test Button -->
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+        <button onclick="testReportGeneration()" style="background: #ff6b6b; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer;">🧪 Test Report</button>
+    </div>
 
     <script src="js/script_new.js"></script>
 </body>
