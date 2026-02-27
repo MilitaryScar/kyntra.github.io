@@ -614,6 +614,76 @@ body {
   }
 }
 
+/* ===== CHARGES STYLING ===== */
+.charges-container {
+  margin-top: var(--space-md);
+}
+
+.charges-label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: var(--space-sm);
+  color: var(--gray-700);
+}
+
+.charges-list {
+  margin-bottom: var(--space-sm);
+}
+
+.charge-item {
+  display: flex;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+  align-items: center;
+}
+
+.charge-description {
+  flex: 1;
+  min-width: 0;
+}
+
+.charge-count {
+  width: 80px;
+  text-align: center;
+}
+
+.remove-charge-btn {
+  background: var(--error-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.remove-charge-btn:hover {
+  background: var(--danger-color);
+}
+
+.add-charge-btn {
+  background: var(--gray-100);
+  border: 1px dashed var(--gray-300);
+  color: var(--gray-600);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.add-charge-btn:hover {
+  background: var(--gray-200);
+  border-color: var(--gray-400);
+  color: var(--gray-700);
+}
+
 @media (max-width: 768px) {
   .nav-menu {
     grid-template-columns: repeat(2, 1fr);

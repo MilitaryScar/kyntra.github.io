@@ -17,7 +17,8 @@
             <div class="logo">
                 <div class="logo-icon">🛡️</div>
                 <div class="logo-text">
-                    <h1>Kyntra's LEO Report Generator</h1>
+                    <h1>Kyntra's LEO</h1>
+                    <p>Professional Report Generator</p>
                 </div>
             </div>
             <nav class="nav-menu">
@@ -87,7 +88,17 @@
                                 <div class="suspect-fields">
                                     <input type="text" placeholder="Suspect Name" class="suspect-name">
                                     <input type="text" placeholder="ID Number" class="suspect-id">
-                                    <textarea placeholder="Charges" class="suspect-charges" rows="2"></textarea>
+                                    <div class="charges-container">
+                                        <label class="charges-label">Charges:</label>
+                                        <div class="charges-list">
+                                            <div class="charge-item">
+                                                <input type="text" placeholder="Charge description" class="charge-description">
+                                                <input type="number" placeholder="Count" class="charge-count" min="1" value="1">
+                                                <button class="remove-charge-btn" onclick="removeCharge(this)">×</button>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="add-charge-btn" onclick="addCharge(this)">+ Add Charge</button>
+                                    </div>
                                 </div>
                                 <button class="remove-btn" onclick="removeField(this)">×</button>
                             </div>
