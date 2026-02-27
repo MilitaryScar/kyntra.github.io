@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kyntra's LEO Report Generator</title>
+    <link rel="stylesheet" href="styles_new.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <div class="logo-text">
+                    <h1>Kyntra's LEO</h1>
+                    <p>Professional Report Generator</p>
+                </div>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-btn" data-report="arrest">🚔 Arrest</button>
+                <button class="nav-btn" data-report="citation">📝 Citation</button>
+                <button class="nav-btn" data-report="case-opening">📁 Case Opening</button>
+                <button class="nav-btn" data-report="investigative-update">🔍 Investigation</button>
+                <button class="nav-btn" data-report="interview">👥 Interview</button>
+                <button class="nav-btn" data-report="ci-report">🕵️ CI Report</button>
+                <button class="nav-btn" data-report="warrant">⚖️ Warrant</button>
+                <button class="nav-btn" data-report="case-closure">✅ Closure</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Report Container -->
+        <div class="report-container">
+            <!-- Arrest Report Section -->
+            <section id="arrest" class="report-section">
+                <div class="section-header">
+                    <h2>🚔 Arrest Report</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('arrest')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('arrest')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Arrest Details -->
+                    <div class="form-group">
+                        <h3>Arrest Details</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="arrestDateTime">Date & Time of Arrest</label>
+                                <input type="datetime-local" id="arrestDateTime" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="arrestLocation">Location</label>
+                                <input type="text" id="arrestLocation" placeholder="Enter arrest location" required>
+                            </div>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="incidentSummary">Incident Summary</label>
+                            <textarea id="incidentSummary" placeholder="Provide detailed incident description" rows="4" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Arresting Officers -->
+                    <div class="form-group">
+                        <h3>Arresting Officers</h3>
+                        <div id="arrestingOfficers" class="dynamic-fields">
+                            <div class="field-item">
+                                <input type="text" placeholder="Officer Name / Badge" class="officer-input">
+                                <button class="remove-btn" onclick="removeField(this)">×</button>
+                            </div>
+                        </div>
+                        <button class="add-field-btn" onclick="addOfficer()">+ Add Officer</button>
+                    </div>
+
+                    <!-- Suspects -->
+                    <div class="form-group">
+                        <h3>Suspects</h3>
+                        <div id="suspects" class="dynamic-fields">
+                            <div class="field-item suspect-item">
+                                <div class="suspect-fields">
+                                    <input type="text" placeholder="Suspect Name" class="suspect-name">
+                                    <input type="text" placeholder="ID Number" class="suspect-id">
+                                    <textarea placeholder="Charges" class="suspect-charges" rows="2"></textarea>
+                                </div>
+                                <button class="remove-btn" onclick="removeField(this)">×</button>
+                            </div>
+                        </div>
+                        <button class="add-field-btn" onclick="addSuspect()">+ Add Suspect</button>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="form-group">
+                        <h3>Additional Information</h3>
+                        <div class="form-field full-width">
+                            <label for="evidence">Evidence Collected</label>
+                            <textarea id="evidence" placeholder="List all evidence collected" rows="3"></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="witnesses">Witnesses</label>
+                            <textarea id="witnesses" placeholder="List witness names and contact information" rows="3"></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="futureNotes">Notes for Future Reference</label>
+                            <textarea id="futureNotes" placeholder="Additional notes or follow-up actions" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Citation Report Section -->
+            <section id="citation" class="report-section">
+                <div class="section-header">
+                    <h2>📝 Citation Report</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('citation')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('citation')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Citation Details -->
+                    <div class="form-group">
+                        <h3>Citation Details</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="citationDateTime">Date & Time</label>
+                                <input type="datetime-local" id="citationDateTime" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="citationLocation">Location</label>
+                                <input type="text" id="citationLocation" placeholder="Enter citation location" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="citationOfficer">Issuing Officer</label>
+                                <input type="text" id="citationOfficer" placeholder="Officer name and badge" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="citationNumber">Citation Number</label>
+                                <input type="text" id="citationNumber" placeholder="Citation #">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Offender Information -->
+                    <div class="form-group">
+                        <h3>Offender Information</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="offenderName">Full Name</label>
+                                <input type="text" id="offenderName" placeholder="Enter full name" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="offenderDOB">Date of Birth</label>
+                                <input type="date" id="offenderDOB" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="offenderLicense">Driver's License</label>
+                                <input type="text" id="offenderLicense" placeholder="License number">
+                            </div>
+                            <div class="form-field">
+                                <label for="offenderAddress">Address</label>
+                                <input type="text" id="offenderAddress" placeholder="Enter address">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Violation Details -->
+                    <div class="form-group">
+                        <h3>Violation Details</h3>
+                        <div class="form-field full-width">
+                            <label for="violations">Violations</label>
+                            <textarea id="violations" placeholder="List all violations and codes" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="vehicleMake">Vehicle Make</label>
+                                <input type="text" id="vehicleMake" placeholder="Vehicle make">
+                            </div>
+                            <div class="form-field">
+                                <label for="vehicleModel">Vehicle Model</label>
+                                <input type="text" id="vehicleModel" placeholder="Vehicle model">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="vehiclePlate">License Plate</label>
+                                <input type="text" id="vehiclePlate" placeholder="License plate number">
+                            </div>
+                            <div class="form-field">
+                                <label for="vehicleColor">Vehicle Color</label>
+                                <input type="text" id="vehicleColor" placeholder="Vehicle color">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Officer Notes -->
+                    <div class="form-group">
+                        <h3>Officer Notes</h3>
+                        <div class="form-field full-width">
+                            <label for="officerNotes">Notes</label>
+                            <textarea id="officerNotes" placeholder="Additional notes about the citation" rows="4" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Case Opening File Section -->
+            <section id="case-opening" class="report-section">
+                <div class="section-header">
+                    <h2>📁 Case Opening File</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('case-opening')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('case-opening')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Case Information -->
+                    <div class="form-group">
+                        <h3>Case Information</h3>
+                        <div class="form-field">
+                            <label for="caseNumber">Case Number</label>
+                            <input type="text" id="caseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="caseName">Case Name</label>
+                                <input type="text" id="caseName" placeholder="Enter case name" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="caseType">Case Type</label>
+                                <select id="caseType" required>
+                                    <option value="">Select case type</option>
+                                    <option value="criminal">Criminal</option>
+                                    <option value="civil">Civil</option>
+                                    <option value="traffic">Traffic</option>
+                                    <option value="juvenile">Juvenile</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="primaryDetective">Primary Detective</label>
+                                <input type="text" id="primaryDetective" placeholder="Lead detective name" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="dateOpened">Date Opened</label>
+                                <input type="date" id="dateOpened" required>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="caseLocation">Case Location</label>
+                            <input type="text" id="caseLocation" placeholder="Where the incident occurred" required>
+                        </div>
+                    </div>
+
+                    <!-- Incident Details -->
+                    <div class="form-group">
+                        <h3>Incident Details</h3>
+                        <div class="form-field full-width">
+                            <label for="incidentSummary">Incident Summary</label>
+                            <textarea id="incidentSummary" placeholder="Provide detailed incident description" rows="5" required></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="initialEvidence">Initial Evidence</label>
+                            <textarea id="initialEvidence" placeholder="List all initial evidence collected" rows="3"></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="initialLeads">Initial Leads</label>
+                            <textarea id="initialLeads" placeholder="List any initial leads or suspects" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Other report sections would follow similar pattern... -->
+            <!-- For brevity, I'll include placeholders for the remaining sections -->
+            
+            <section id="investigative-update" class="report-section">
+                <div class="section-header">
+                    <h2>🔍 Investigative Update</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('investigative-update')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('investigative-update')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Case Information -->
+                    <div class="form-group">
+                        <h3>Case Information</h3>
+                        <div class="form-field">
+                            <label for="updateCaseNumber">Case Number</label>
+                            <input type="text" id="updateCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="updateDateTime">Date / Time</label>
+                                <input type="datetime-local" id="updateDateTime" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="updateActionTaken">Action Taken</label>
+                                <select id="updateActionTaken" required>
+                                    <option value="">Select action</option>
+                                    <option value="interview">Interview</option>
+                                    <option value="surveillance">Surveillance</option>
+                                    <option value="search">Search</option>
+                                    <option value="evidence-processing">Evidence Processing</option>
+                                    <option value="attempted-contact">Attempted Contact</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Details -->
+                    <div class="form-group">
+                        <h3>Action Details</h3>
+                        <div class="form-field full-width">
+                            <label for="actionDetails">Details</label>
+                            <textarea id="actionDetails" placeholder="Who was involved, what occurred, where it took place, and how the action was conducted" rows="4" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="actionResult">Result</label>
+                                <select id="actionResult" required>
+                                    <option value="">Select result</option>
+                                    <option value="successful">Successful</option>
+                                    <option value="unsuccessful">Unsuccessful</option>
+                                    <option value="partial">Partial</option>
+                                    <option value="pending">Pending</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="investigatingDetective">Investigating Detective</label>
+                                <input type="text" id="investigatingDetective" placeholder="Detective name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Evidence and Next Steps -->
+                    <div class="form-group">
+                        <h3>Evidence & Follow-up</h3>
+                        <div class="form-field full-width">
+                            <label for="evidenceCollected">Evidence Collected or Identified</label>
+                            <textarea id="evidenceCollected" placeholder="List any evidence collected or identified during this action" rows="3"></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="nextSteps">Next Steps</label>
+                            <textarea id="nextSteps" placeholder="Planned follow-up actions and next steps in the investigation" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="interview" class="report-section">
+                <div class="section-header">
+                    <h2>👥 Interview Report</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('interview')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('interview')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Case Information -->
+                    <div class="form-group">
+                        <h3>Case Information</h3>
+                        <div class="form-field">
+                            <label for="interviewCaseNumber">Case Number</label>
+                            <input type="text" id="interviewCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="interviewDateTime">Date / Time</label>
+                                <input type="datetime-local" id="interviewDateTime" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="interviewType">Interview Type</label>
+                                <select id="interviewType" required>
+                                    <option value="">Select type</option>
+                                    <option value="witness">Witness</option>
+                                    <option value="victim">Victim</option>
+                                    <option value="suspect">Suspect</option>
+                                    <option value="person-of-interest">Person of Interest</option>
+                                    <option value="expert">Expert</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Interviewee Information -->
+                    <div class="form-group">
+                        <h3>Interviewee Information</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="intervieweeName">Name</label>
+                                <input type="text" id="intervieweeName" placeholder="Full name of interviewee" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="interviewLocation">Location</label>
+                                <input type="text" id="interviewLocation" placeholder="Interview location" required>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="interviewingDetectives">Interviewing Detective(s)</label>
+                            <input type="text" id="interviewingDetectives" placeholder="Names of conducting detectives" required>
+                        </div>
+                    </div>
+
+                    <!-- Interview Content -->
+                    <div class="form-group">
+                        <h3>Interview Content</h3>
+                        <div class="form-field full-width">
+                            <label for="statementSummary">Summary of Statement</label>
+                            <textarea id="statementSummary" placeholder="Narrative-style summary of what was said during the interview" rows="6" required></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="keyPoints">Key Points</label>
+                            <textarea id="keyPoints" placeholder="Important information, specific details, quotes, or significant statements" rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Assessment -->
+                    <div class="form-group">
+                        <h3>Assessment</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="credibilityAssessment">Credibility Assessment</label>
+                                <select id="credibilityAssessment" required>
+                                    <option value="">Select assessment</option>
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="interviewDuration">Duration</label>
+                                <input type="text" id="interviewDuration" placeholder="e.g., 45 minutes, 2 hours">
+                            </div>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="credibilityReasoning">Credibility Reasoning</label>
+                            <textarea id="credibilityReasoning" placeholder="Explanation for credibility assessment including demeanor, consistency, corroboration, etc." rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="ci-report" class="report-section">
+                <div class="section-header">
+                    <h2>🕵️ Confidential Informant Report</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('ci-report')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('ci-report')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Case Information -->
+                    <div class="form-group">
+                        <h3>Case Information</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="ciCaseNumber">Case Number</label>
+                                <input type="text" id="ciCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                                <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
+                            </div>
+                            <div class="form-field">
+                                <label for="operationName">Operation Name</label>
+                                <input type="text" id="operationName" placeholder="Operation name if applicable">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Informant Information -->
+                    <div class="form-group">
+                        <h3>Informant Information</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="ciIdentifier">CI Identifier</label>
+                                <input type="text" id="ciIdentifier" placeholder="Confidential identifier code" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="ciClassification">CI Classification</label>
+                                <select id="ciClassification" required>
+                                    <option value="">Select classification</option>
+                                    <option value="A">Class A - Reliable</option>
+                                    <option value="B">Class B - Usually Reliable</option>
+                                    <option value="C">Class C - Sometimes Reliable</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="handlingDetective">Handling Detective</label>
+                            <input type="text" id="handlingDetective" placeholder="Primary detective handling CI" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="ciContactDateTime">Date / Time of Contact</label>
+                                <input type="datetime-local" id="ciContactDateTime" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="contactMethod">Method of Contact</label>
+                                <select id="contactMethod" required>
+                                    <option value="">Select method</option>
+                                    <option value="in-person">In Person</option>
+                                    <option value="phone">Phone Call</option>
+                                    <option value="text">Text Message</option>
+                                    <option value="email">Email</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intelligence Information -->
+                    <div class="form-group">
+                        <h3>Intelligence Information</h3>
+                        <div class="form-field full-width">
+                            <label for="intelligenceProvided">Intelligence Provided</label>
+                            <textarea id="intelligenceProvided" placeholder="Summarized and sanitized intelligence - no identifying information" rows="5" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="reliabilityAssessment">Reliability Assessment</label>
+                                <select id="reliabilityAssessment" required>
+                                    <option value="">Select assessment</option>
+                                    <option value="new">New</option>
+                                    <option value="established">Established</option>
+                                    <option value="questionable">Questionable</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="supervisorNotified">Supervisor Notified</label>
+                                <select id="supervisorNotified" required>
+                                    <option value="">Select option</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actionable Information -->
+                    <div class="form-group">
+                        <h3>Actionable Information</h3>
+                        <div class="form-field full-width">
+                            <label for="actionableLeads">Actionable Leads Generated</label>
+                            <textarea id="actionableLeads" placeholder="Specific leads that can be acted upon based on CI information" rows="4"></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="verificationNeeded">Verification Needed</label>
+                            <textarea id="verificationNeeded" placeholder="Information that requires verification before action" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="warrant" class="report-section">
+                <div class="section-header">
+                    <h2>⚖️ Warrant Support Summary</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('warrant')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('warrant')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Case Information -->
+                    <div class="form-group">
+                        <h3>Case Information</h3>
+                        <div class="form-field">
+                            <label for="warrantCaseNumber">Case Number</label>
+                            <input type="text" id="warrantCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="warrantType">Type</label>
+                                <select id="warrantType" required>
+                                    <option value="">Select warrant type</option>
+                                    <option value="arrest">Arrest Warrant</option>
+                                    <option value="search">Search Warrant</option>
+                                    <option value="both">Arrest & Search Warrant</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="warrantDate">Warrant Request Date</label>
+                                <input type="date" id="warrantDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Probable Cause -->
+                    <div class="form-group">
+                        <h3>Probable Cause</h3>
+                        <div class="form-field full-width">
+                            <label for="probableCauseSummary">Probable Cause Summary</label>
+                            <textarea id="probableCauseSummary" placeholder="Concise, evidence-based explanation establishing probable cause" rows="5" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="suspectName">Suspect / Target</label>
+                                <input type="text" id="suspectName" placeholder="Name of suspect or location to be searched" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="targetLocation">Location</label>
+                                <input type="text" id="targetLocation" placeholder="Address or location for search warrant" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Supporting Evidence -->
+                    <div class="form-group">
+                        <h3>Supporting Evidence</h3>
+                        <div class="form-field full-width">
+                            <label for="evidenceSupporting">Evidence Supporting Warrant</label>
+                            <textarea id="evidenceSupporting" placeholder="List all evidence that supports the warrant request" rows="4" required></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="relatedReports">Related Reports</label>
+                            <textarea id="relatedReports" placeholder="Interview dates, CI reports, forensic results, surveillance observations, etc." rows="4"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="form-group">
+                        <h3>Additional Information</h3>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="requestingDetective">Requesting Detective</label>
+                                <input type="text" id="requestingDetective" placeholder="Detective requesting warrant" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="reviewingSupervisor">Reviewing Supervisor</label>
+                                <input type="text" id="reviewingSupervisor" placeholder="Supervisor reviewing warrant request" required>
+                            </div>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="additionalNotes">Additional Notes</label>
+                            <textarea id="additionalNotes" placeholder="Any additional information relevant to the warrant request" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="case-closure" class="report-section">
+                <div class="section-header">
+                    <h2>✅ Case Closure Summary</h2>
+                    <div class="section-actions">
+                        <button class="action-btn secondary" onclick="clearForm('case-closure')">Clear Form</button>
+                        <button class="action-btn primary" onclick="generateReport('case-closure')">Generate Report</button>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <!-- Case Information -->
+                    <div class="form-group">
+                        <h3>Case Information</h3>
+                        <div class="form-field">
+                            <label for="closureCaseNumber">Case Number</label>
+                            <input type="text" id="closureCaseNumber" placeholder="CID-0247-SO" pattern="CID-\d+-SO" required>
+                            <small class="field-hint">Format: CID-ReportNumber-SO (e.g., CID-0247-SO)</small>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="caseStatus">Status</label>
+                                <select id="caseStatus" required>
+                                    <option value="">Select status</option>
+                                    <option value="closed">Closed</option>
+                                    <option value="cold">Cold</option>
+                                    <option value="suspended">Suspended</option>
+                                    <option value="transferred">Transferred</option>
+                                </select>
+                            </div>
+                            <div class="form-field">
+                                <label for="closureDate">Closure Date</label>
+                                <input type="date" id="closureDate" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case Outcome -->
+                    <div class="form-group">
+                        <h3>Case Outcome</h3>
+                        <div class="form-field">
+                            <label for="caseOutcome">Outcome</label>
+                            <select id="caseOutcome" required>
+                                <option value="">Select outcome</option>
+                                <option value="arrest">Arrest</option>
+                                <option value="charges-filed">Charges Filed</option>
+                                <option value="case-exhausted">Case Exhausted</option>
+                                <option value="civilian-withdrawal">Civilian Withdrawal</option>
+                                <option value="insufficient-evidence">Insufficient Evidence</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="finalSummary">Final Summary</label>
+                            <textarea id="finalSummary" placeholder="What occurred, what was proven, and what—if anything—remains unresolved" rows="5" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Related Cases -->
+                    <div class="form-group">
+                        <h3>Related Cases & Operations</h3>
+                        <div class="form-field full-width">
+                            <label for="relatedCases">Related Cases / Operations</label>
+                            <textarea id="relatedCases" placeholder="List any related cases, operations, or ongoing investigations" rows="3"></textarea>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="crossReferences">Cross References</label>
+                            <textarea id="crossReferences" placeholder="Other cases or investigations that reference this case" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Future Reference -->
+                    <div class="form-group">
+                        <h3>Future Reference</h3>
+                        <div class="form-field full-width">
+                            <label for="futureNotes">Notes for Future Reference</label>
+                            <textarea id="futureNotes" placeholder="Information that may be useful for future investigations or case reviews" rows="4"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="closingDetective">Closing Detective</label>
+                                <input type="text" id="closingDetective" placeholder="Detective closing the case" required>
+                            </div>
+                            <div class="form-field">
+                                <label for="reviewingSupervisor">Reviewing Supervisor</label>
+                                <input type="text" id="reviewingSupervisor" placeholder="Supervisor reviewing closure" required>
+                            </div>
+                        </div>
+                        <div class="form-field full-width">
+                            <label for="evidenceDisposition">Evidence Disposition</label>
+                            <textarea id="evidenceDisposition" placeholder="Final disposition of all evidence collected in the case" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Output Section -->
+        <div class="output-container">
+            <div class="output-header">
+                <h3>Generated Report</h3>
+                <div class="output-actions">
+                    <button class="action-btn secondary" onclick="copyReport()">📋 Copy</button>
+                    <button class="action-btn secondary" onclick="downloadReport()">💾 Download</button>
+                    <button class="action-btn secondary" onclick="printReport()">🖨️ Print</button>
+                    <button class="action-btn danger" onclick="clearOutput()">🗑️ Clear</button>
+                </div>
+            </div>
+            <div class="output-content">
+                <pre id="reportOutput">Your generated report will appear here...</pre>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 Kyntra's LEO Report Generator. Professional Law Enforcement Tools.</p>
+        </div>
+    </footer>
+
+    <!-- Status Messages -->
+    <div id="statusContainer" class="status-container"></div>
+
+    <script src="script_new.js"></script>
+</body>
+</html>
