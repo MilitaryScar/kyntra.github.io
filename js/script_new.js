@@ -442,7 +442,6 @@ const ReportGenerator = {
 
     let report = `${headers[reportType]}\n`;
     report += '='.repeat(50) + '\n\n';
-    report += `Generated: ${Utils.formatDate(new Date())}\n\n`;
 
     console.log('Report header created:', report);
 
